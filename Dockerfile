@@ -6,7 +6,7 @@ RUN npm install -g pnpm
 WORKDIR /
 
 # Copy package files and install dependencies
-COPY package*.json pnpm-lock.yaml ./
+COPY package*.json pnpm-*.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Copy TypeScript source code
