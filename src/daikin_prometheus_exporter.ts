@@ -22,6 +22,7 @@ export class DaikinPrometheusExporter {
   private consumptionTodayGauge!: Gauge<string>;
   private consumptionWeekGauge!: Gauge<string>;
   private consumptionMonthGauge!: Gauge<string>;
+  private consumptionYearGauge!: Gauge<string>;
   private dataUpdateCounter!: Counter<string>;
 
   constructor() {
@@ -100,6 +101,12 @@ export class DaikinPrometheusExporter {
     this.consumptionMonthGauge = new Gauge({
       name: 'daikin_consumption_month_kwh',
       help: 'This month energy consumption in kWh',
+      labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
+    });
+
+    this.consumptionYearGauge = new Gauge({
+      name: 'daikin_consumption_year_kwh',
+      help: 'This year energy consumption in kWh',
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
@@ -204,6 +211,10 @@ export class DaikinPrometheusExporter {
       if (control.consumptionThisMonth !== undefined) {
         this.consumptionMonthGauge.set(controlLabels, control.consumptionThisMonth);
       }
+
+      if (control.consumptionThisYear !== undefined) {
+        this.consumptionYearGauge.set(controlLabels, control.consumptionThisYear);
+      }
     });
   }
 
@@ -221,6 +232,7 @@ export class DaikinPrometheusExporter {
     this.consumptionTodayGauge.reset();
     this.consumptionWeekGauge.reset();
     this.consumptionMonthGauge.reset();
+    this.consumptionYearGauge.reset();
   }
 
   startServer(port: number): void {

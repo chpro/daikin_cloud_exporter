@@ -9,7 +9,7 @@ This application connects to the Daikin Cloud API to fetch real-time data from y
 ## ✨ Features
 
 - **Real-time HVAC monitoring** - Temperature, humidity, and device status
-- **Energy consumption tracking** - Daily, weekly, and monthly power usage
+- **Energy consumption tracking** - Daily, weekly, monthly, and yearly power usage
 - **Prometheus metrics** - Standard format for integration with monitoring systems
 - **Rate limit compliant** - Respects Daikin's 200 API calls per day limit
 - **Data caching** - Intelligent caching to minimize API calls and survive restarts
@@ -34,6 +34,7 @@ This application connects to the Daikin Cloud API to fetch real-time data from y
 | `daikin_consumption_today_kwh` | Gauge | Today's energy consumption in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_week_kwh` | Gauge | This week's energy consumption in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_month_kwh` | Gauge | This month's energy consumption in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_year_kwh` | Gauge | This year's energy consumption in kWh | device_id, device_model, device_name, control_id |
 | `daikin_data_updates_total` | Counter | Total number of API calls made | status |
 
 ## 🛠️ Tech Stack
