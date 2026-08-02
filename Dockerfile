@@ -3,15 +3,16 @@ FROM node:24-alpine
 # Install pnpm globally
 RUN npm install -g pnpm
 
-WORKDIR /
+WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json pnpm-*.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# Copy TypeScript source code
+# Copy TypeScript source code and certificates
 COPY tsconfig.json ./
 COPY src/ ./src/
+COPY cert/ ./cert/
 
 # Build TypeScript to JavaScript
 RUN pnpm run build
