@@ -112,10 +112,14 @@ interface ParsedDaikinData {
     isInErrorState: boolean;
     isInWarningState: boolean;
     isInCautionState: boolean;
-    consumptionToday?: number;
-    consumptionThisWeek?: number;
-    consumptionThisMonth?: number;
-    consumptionThisYear?: number;
+    consumptionHeatingToday?: number;
+    consumptionHeatingThisWeek?: number;
+    consumptionHeatingThisMonth?: number;
+    consumptionHeatingThisYear?: number;
+    consumptionCoolingToday?: number;
+    consumptionCoolingThisWeek?: number;
+    consumptionCoolingThisMonth?: number;
+    consumptionCoolingThisYear?: number;
   }>;
 }
 
@@ -138,25 +142,24 @@ export class DaikinDataParser {
       const fanControl = controlPoint.fanControl?.value;
       const consumptionData = controlPoint.consumptionData?.value;
 
-      // Calculate daily, weekly, monthly, and yearly consumption values across all electrical operation modes
-      // (heating, cooling, etc.) following daikin_onecta (Home Assistant integration) logic:
+      // Calculate daily, weekly, monthly, and yearly consumption values per electrical operation mode
+      // (heating, cooling) following daikin_onecta (Home Assistant integration) logic:
       // - d (daily): slots 12 to end (today's hours)
       // - w (weekly): slots 7 to end (this week's days)
       // - m (monthly): slot 12 + currentMonthIndex (this month)
       // - y (yearly): slot 12 to 12 + currentMonthIndex (this year's months from m) or slot 1 to end (this year from y)
-      let consumptionToday: number | undefined;
-      let consumptionThisWeek: number | undefined;
-      let consumptionThisMonth: number | undefined;
-      let consumptionThisYear: number | undefined;
+      let consumptionHeatingToday: number | undefined;
+      let consumptionHeatingThisWeek: number | undefined;
+      let consumptionHeatingThisMonth: number | undefined;
+      let consumptionHeatingThisYear: number | undefined;
+
+      let consumptionCoolingToday: number | undefined;
+      let consumptionCoolingThisWeek: number | undefined;
+      let consumptionCoolingThisMonth: number | undefined;
+      let consumptionCoolingThisYear: number | undefined;
 
       const electricalData = consumptionData?.electrical;
       if (electricalData && typeof electricalData === 'object') {
-        let todaySum = 0;
-        let weekSum = 0;
-        let monthSum = 0;
-        let yearSum = 0;
-        let hasData = false;
-
         const currentMonthIndex = new Date().getMonth(); // 0..11 (January = 0, December = 11)
 
         const extractPeriodSum = (periodData?: (number | null)[], periodType?: 'd' | 'w' | 'm' | 'y'): number => {
@@ -186,6 +189,33 @@ export class DaikinDataParser {
           return energyValues.slice(startIndex, endIndex).reduce((acc, val) => acc + val, 0);
         };
 
+        const calculateModeSums = (modeData?: {
+          d?: (number | null)[];
+          w?: (number | null)[];
+          m?: (number | null)[];
+          y?: (number | null)[];
+        }) => {
+          if (!modeData || typeof modeData !== 'object') return null;
+          const isArray = Array.isArray(modeData.d) || Array.isArray(modeData.w) || Array.isArray(modeData.m) || Array.isArray(modeData.y);
+          if (!isArray) return null;
+
+          const t = extractPeriodSum(modeData.d, 'd');
+          const w = extractPeriodSum(modeData.w, 'w');
+          const m = extractPeriodSum(modeData.m, 'm');
+
+          let y = 0;
+          if (Array.isArray(modeData.y) && modeData.y.length > 0) {
+            y = extractPeriodSum(modeData.y, 'y');
+          } else if (Array.isArray(modeData.m) && modeData.m.length > 0) {
+            const energyValues = modeData.m.map(v => (typeof v === 'number' && !isNaN(v) ? v : 0));
+            const startIdx = energyValues.length > 12 ? 12 : 0;
+            const endIdx = energyValues.length > (12 + currentMonthIndex) ? 12 + currentMonthIndex + 1 : energyValues.length;
+            y = energyValues.slice(startIdx, endIdx).reduce((acc, val) => acc + val, 0);
+          }
+
+          return { today: t, week: w, month: m, year: y };
+        };
+
         for (const [key, value] of Object.entries(electricalData)) {
           if (key === 'unit' || !value || typeof value !== 'object') continue;
 
@@ -195,28 +225,20 @@ export class DaikinDataParser {
             m?: (number | null)[];
             y?: (number | null)[];
           };
-          if (Array.isArray(modeData.d) || Array.isArray(modeData.w) || Array.isArray(modeData.m) || Array.isArray(modeData.y)) {
-            hasData = true;
-            todaySum += extractPeriodSum(modeData.d, 'd');
-            weekSum += extractPeriodSum(modeData.w, 'w');
-            monthSum += extractPeriodSum(modeData.m, 'm');
-
-            if (Array.isArray(modeData.y) && modeData.y.length > 0) {
-              yearSum += extractPeriodSum(modeData.y, 'y');
-            } else if (Array.isArray(modeData.m) && modeData.m.length > 0) {
-              const energyValues = modeData.m.map(v => (typeof v === 'number' && !isNaN(v) ? v : 0));
-              const startIdx = energyValues.length > 12 ? 12 : 0;
-              const endIdx = energyValues.length > (12 + currentMonthIndex) ? 12 + currentMonthIndex + 1 : energyValues.length;
-              yearSum += energyValues.slice(startIdx, endIdx).reduce((acc, val) => acc + val, 0);
+          const sums = calculateModeSums(modeData);
+          if (sums) {
+            if (key === 'heating') {
+              consumptionHeatingToday = Math.round(sums.today * 1000) / 1000;
+              consumptionHeatingThisWeek = Math.round(sums.week * 1000) / 1000;
+              consumptionHeatingThisMonth = Math.round(sums.month * 1000) / 1000;
+              consumptionHeatingThisYear = Math.round(sums.year * 1000) / 1000;
+            } else if (key === 'cooling') {
+              consumptionCoolingToday = Math.round(sums.today * 1000) / 1000;
+              consumptionCoolingThisWeek = Math.round(sums.week * 1000) / 1000;
+              consumptionCoolingThisMonth = Math.round(sums.month * 1000) / 1000;
+              consumptionCoolingThisYear = Math.round(sums.year * 1000) / 1000;
             }
           }
-        }
-
-        if (hasData) {
-          consumptionToday = Math.round(todaySum * 1000) / 1000;
-          consumptionThisWeek = Math.round(weekSum * 1000) / 1000;
-          consumptionThisMonth = Math.round(monthSum * 1000) / 1000;
-          consumptionThisYear = Math.round(yearSum * 1000) / 1000;
         }
       }
 
@@ -246,10 +268,14 @@ export class DaikinDataParser {
         isInErrorState: controlPoint.isInErrorState?.value || false,
         isInWarningState: controlPoint.isInWarningState?.value || false,
         isInCautionState: controlPoint.isInCautionState?.value || false,
-        consumptionToday,
-        consumptionThisWeek,
-        consumptionThisMonth,
-        consumptionThisYear
+        consumptionHeatingToday,
+        consumptionHeatingThisWeek,
+        consumptionHeatingThisMonth,
+        consumptionHeatingThisYear,
+        consumptionCoolingToday,
+        consumptionCoolingThisWeek,
+        consumptionCoolingThisMonth,
+        consumptionCoolingThisYear
       });
     }
 

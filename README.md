@@ -31,10 +31,14 @@ This application connects to the Daikin Cloud API to fetch real-time data from y
 | `daikin_powerful_mode` | Gauge | Powerful mode status | device_id, device_model, device_name, control_id |
 | `daikin_error_state` | Gauge | Device error state | device_id, device_model, device_name, control_id |
 | `daikin_warning_state` | Gauge | Device warning state | device_id, device_model, device_name, control_id |
-| `daikin_consumption_today_kwh` | Gauge | Today's energy consumption in kWh | device_id, device_model, device_name, control_id |
-| `daikin_consumption_week_kwh` | Gauge | This week's energy consumption in kWh | device_id, device_model, device_name, control_id |
-| `daikin_consumption_month_kwh` | Gauge | This month's energy consumption in kWh | device_id, device_model, device_name, control_id |
-| `daikin_consumption_year_kwh` | Gauge | This year's energy consumption in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_heating_today_kwh` | Gauge | Heating energy consumption today in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_heating_week_kwh` | Gauge | Heating energy consumption this week in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_heating_month_kwh` | Gauge | Heating energy consumption this month in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_heating_year_kwh` | Gauge | Heating energy consumption this year in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_cooling_today_kwh` | Gauge | Cooling energy consumption today in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_cooling_week_kwh` | Gauge | Cooling energy consumption this week in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_cooling_month_kwh` | Gauge | Cooling energy consumption this month in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_cooling_year_kwh` | Gauge | Cooling energy consumption this year in kWh | device_id, device_model, device_name, control_id |
 | `daikin_data_updates_total` | Counter | Total number of API calls made | status |
 
 ## 🛠️ Tech Stack

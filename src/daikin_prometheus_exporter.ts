@@ -19,10 +19,14 @@ export class DaikinPrometheusExporter {
   private powerfulModeGauge!: Gauge<string>;
   private errorStateGauge!: Gauge<string>;
   private warningStateGauge!: Gauge<string>;
-  private consumptionTodayGauge!: Gauge<string>;
-  private consumptionWeekGauge!: Gauge<string>;
-  private consumptionMonthGauge!: Gauge<string>;
-  private consumptionYearGauge!: Gauge<string>;
+  private consumptionHeatingTodayGauge!: Gauge<string>;
+  private consumptionHeatingWeekGauge!: Gauge<string>;
+  private consumptionHeatingMonthGauge!: Gauge<string>;
+  private consumptionHeatingYearGauge!: Gauge<string>;
+  private consumptionCoolingTodayGauge!: Gauge<string>;
+  private consumptionCoolingWeekGauge!: Gauge<string>;
+  private consumptionCoolingMonthGauge!: Gauge<string>;
+  private consumptionCoolingYearGauge!: Gauge<string>;
   private dataUpdateCounter!: Counter<string>;
 
   constructor() {
@@ -86,27 +90,51 @@ export class DaikinPrometheusExporter {
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
-    this.consumptionTodayGauge = new Gauge({
-      name: 'daikin_consumption_today_kwh',
-      help: 'Today energy consumption in kWh',
+    this.consumptionHeatingTodayGauge = new Gauge({
+      name: 'daikin_consumption_heating_today_kwh',
+      help: 'Heating energy consumption today in kWh',
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
-    this.consumptionWeekGauge = new Gauge({
-      name: 'daikin_consumption_week_kwh',
-      help: 'This week energy consumption in kWh',
+    this.consumptionHeatingWeekGauge = new Gauge({
+      name: 'daikin_consumption_heating_week_kwh',
+      help: 'Heating energy consumption this week in kWh',
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
-    this.consumptionMonthGauge = new Gauge({
-      name: 'daikin_consumption_month_kwh',
-      help: 'This month energy consumption in kWh',
+    this.consumptionHeatingMonthGauge = new Gauge({
+      name: 'daikin_consumption_heating_month_kwh',
+      help: 'Heating energy consumption this month in kWh',
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
-    this.consumptionYearGauge = new Gauge({
-      name: 'daikin_consumption_year_kwh',
-      help: 'This year energy consumption in kWh',
+    this.consumptionHeatingYearGauge = new Gauge({
+      name: 'daikin_consumption_heating_year_kwh',
+      help: 'Heating energy consumption this year in kWh',
+      labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
+    });
+
+    this.consumptionCoolingTodayGauge = new Gauge({
+      name: 'daikin_consumption_cooling_today_kwh',
+      help: 'Cooling energy consumption today in kWh',
+      labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
+    });
+
+    this.consumptionCoolingWeekGauge = new Gauge({
+      name: 'daikin_consumption_cooling_week_kwh',
+      help: 'Cooling energy consumption this week in kWh',
+      labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
+    });
+
+    this.consumptionCoolingMonthGauge = new Gauge({
+      name: 'daikin_consumption_cooling_month_kwh',
+      help: 'Cooling energy consumption this month in kWh',
+      labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
+    });
+
+    this.consumptionCoolingYearGauge = new Gauge({
+      name: 'daikin_consumption_cooling_year_kwh',
+      help: 'Cooling energy consumption this year in kWh',
       labelNames: ['device_id', 'device_model', 'device_name', 'control_id']
     });
 
@@ -200,20 +228,36 @@ export class DaikinPrometheusExporter {
       this.warningStateGauge.set(controlLabels, control.isInWarningState ? 1 : 0);
 
       // Consumi energetici
-      if (control.consumptionToday !== undefined) {
-        this.consumptionTodayGauge.set(controlLabels, control.consumptionToday);
+      if (control.consumptionHeatingToday !== undefined) {
+        this.consumptionHeatingTodayGauge.set(controlLabels, control.consumptionHeatingToday);
       }
 
-      if (control.consumptionThisWeek !== undefined) {
-        this.consumptionWeekGauge.set(controlLabels, control.consumptionThisWeek);
+      if (control.consumptionHeatingThisWeek !== undefined) {
+        this.consumptionHeatingWeekGauge.set(controlLabels, control.consumptionHeatingThisWeek);
       }
 
-      if (control.consumptionThisMonth !== undefined) {
-        this.consumptionMonthGauge.set(controlLabels, control.consumptionThisMonth);
+      if (control.consumptionHeatingThisMonth !== undefined) {
+        this.consumptionHeatingMonthGauge.set(controlLabels, control.consumptionHeatingThisMonth);
       }
 
-      if (control.consumptionThisYear !== undefined) {
-        this.consumptionYearGauge.set(controlLabels, control.consumptionThisYear);
+      if (control.consumptionHeatingThisYear !== undefined) {
+        this.consumptionHeatingYearGauge.set(controlLabels, control.consumptionHeatingThisYear);
+      }
+
+      if (control.consumptionCoolingToday !== undefined) {
+        this.consumptionCoolingTodayGauge.set(controlLabels, control.consumptionCoolingToday);
+      }
+
+      if (control.consumptionCoolingThisWeek !== undefined) {
+        this.consumptionCoolingWeekGauge.set(controlLabels, control.consumptionCoolingThisWeek);
+      }
+
+      if (control.consumptionCoolingThisMonth !== undefined) {
+        this.consumptionCoolingMonthGauge.set(controlLabels, control.consumptionCoolingThisMonth);
+      }
+
+      if (control.consumptionCoolingThisYear !== undefined) {
+        this.consumptionCoolingYearGauge.set(controlLabels, control.consumptionCoolingThisYear);
       }
     });
   }
@@ -229,10 +273,14 @@ export class DaikinPrometheusExporter {
     this.powerfulModeGauge.reset();
     this.errorStateGauge.reset();
     this.warningStateGauge.reset();
-    this.consumptionTodayGauge.reset();
-    this.consumptionWeekGauge.reset();
-    this.consumptionMonthGauge.reset();
-    this.consumptionYearGauge.reset();
+    this.consumptionHeatingTodayGauge.reset();
+    this.consumptionHeatingWeekGauge.reset();
+    this.consumptionHeatingMonthGauge.reset();
+    this.consumptionHeatingYearGauge.reset();
+    this.consumptionCoolingTodayGauge.reset();
+    this.consumptionCoolingWeekGauge.reset();
+    this.consumptionCoolingMonthGauge.reset();
+    this.consumptionCoolingYearGauge.reset();
   }
 
   startServer(port: number): void {
