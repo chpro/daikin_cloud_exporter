@@ -94,6 +94,10 @@ PROMETHEUS_PORT=3001
 CERT_PATH=./cert
 CACHE_FILE_PATH=./daikin-cache.json
 TOKEN_FILE_PATH=./daikin-controller-cloud-tokenset
+
+# OIDC Callback Server
+# OIDC_CALLBACK_SERVER_PORT=59748
+# OIDC_CALLBACK_SERVER_EXTERNAL_ADDRESS=daikin.local
 ```
 
 ### Running the Application
@@ -152,6 +156,8 @@ cert/                             # SSL certificates for OIDC flow
 | `CERT_PATH` | `./cert` | Directory containing SSL certificates |
 | `CACHE_FILE_PATH` | `./daikin-cache.json` | File path for data cache |
 | `TOKEN_FILE_PATH` | `./daikin-controller-cloud-tokenset` | File path for OIDC tokens |
+| `OIDC_CALLBACK_SERVER_PORT` | 59748 | Local port for the OIDC callback server |
+| `OIDC_CALLBACK_SERVER_EXTERNAL_ADDRESS` | - | Externally reachable address (domain/IP) of the OIDC callback server; required when behind NAT, a reverse proxy, or Docker |
 
 ## 🐳 Docker Deployment
 

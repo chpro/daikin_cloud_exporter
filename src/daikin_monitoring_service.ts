@@ -14,6 +14,7 @@ interface DaikinConfig {
   cacheFilePath: string;
   tokenFilePath: string;
   oidcCallbackServerPort: number;
+  oidcCallbackServerExternalAddress?: string;
 }
 
 export class DaikinMonitoringService {
@@ -35,6 +36,7 @@ export class DaikinMonitoringService {
       oidcTokenSetFilePath: config.tokenFilePath,
       oidcAuthorizationTimeoutS: 120,
       oidcCallbackServerPort: config.oidcCallbackServerPort,
+      ...(config.oidcCallbackServerExternalAddress ? { oidcCallbackServerExternalAddress: config.oidcCallbackServerExternalAddress } : {}),
       certificatePathKey: resolve(config.certPath, 'cert.key'),
       certificatePathCert: resolve(config.certPath, 'cert.pem'),
     });

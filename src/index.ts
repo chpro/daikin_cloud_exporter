@@ -21,6 +21,7 @@ const config = {
     cacheFilePath: process.env.CACHE_FILE_PATH || './daikin-cache.json',
     tokenFilePath: process.env.TOKEN_FILE_PATH || './daikin-controller-cloud-tokenset',
     oidcCallbackServerPort: parseInt(process.env.OIDC_CALLBACK_SERVER_PORT || '59748'),
+    oidcCallbackServerExternalAddress: process.env.OIDC_CALLBACK_SERVER_EXTERNAL_ADDRESS || undefined,
 };
 
 // ============================================================================
@@ -33,6 +34,9 @@ console.log('├── OIDC Configuration:');
 console.log(`│   ├── Client ID: ${config.oidcClientId ? `${config.oidcClientId.substring(0, 8)}***` : '❌ NOT SET'}`);
 console.log(`│   ├── Client Secret: ${config.oidcClientSecret ? `${config.oidcClientSecret.substring(0, 8)}***` : '❌ NOT SET'}`);
 console.log(`│   └── Callback Port: ${config.oidcCallbackServerPort}`);
+if (config.oidcCallbackServerExternalAddress) {
+    console.log(`│   └── Callback External Address: ${config.oidcCallbackServerExternalAddress}`);
+}
 console.log('├── Monitoring Configuration:');
 console.log(`│   ├── Update Interval: ${config.updateInterval}s (${Math.round(config.updateInterval/60)}min)`);
 console.log(`│   └── Prometheus Port: ${config.prometheusPort}`);
