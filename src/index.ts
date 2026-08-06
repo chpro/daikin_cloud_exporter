@@ -22,6 +22,7 @@ const config = {
     tokenFilePath: process.env.TOKEN_FILE_PATH || './daikin-controller-cloud-tokenset',
     oidcCallbackServerPort: parseInt(process.env.OIDC_CALLBACK_SERVER_PORT || '59748'),
     oidcCallbackServerExternalAddress: process.env.OIDC_CALLBACK_SERVER_EXTERNAL_ADDRESS || undefined,
+    enableNodeMetrics: process.env.ENABLE_NODE_METRICS === 'true',
 };
 
 // ============================================================================
@@ -39,7 +40,8 @@ if (config.oidcCallbackServerExternalAddress) {
 }
 console.log('├── Monitoring Configuration:');
 console.log(`│   ├── Update Interval: ${config.updateInterval}s (${Math.round(config.updateInterval/60)}min)`);
-console.log(`│   └── Prometheus Port: ${config.prometheusPort}`);
+console.log(`│   ├── Prometheus Port: ${config.prometheusPort}`);
+console.log(`│   └── Node.js Default Metrics: ${config.enableNodeMetrics ? 'ENABLED' : 'DISABLED'}`);
 console.log('├── File Paths:');
 console.log(`│   ├── Certificates: ${config.certPath}`);
 console.log(`│   ├── Cache File: ${config.cacheFilePath}`);

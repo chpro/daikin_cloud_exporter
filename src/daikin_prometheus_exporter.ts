@@ -2,9 +2,6 @@ import { register, Gauge, Counter, collectDefaultMetrics } from 'prom-client';
 import express from 'express';
 import { DaikinDataParser, ParsedDaikinData } from './daikin_data_parser.js';
 
-// Abilita metriche di default di Node.js
-collectDefaultMetrics();
-
 export class DaikinPrometheusExporter {
   private app: express.Application;
   private server: any;
@@ -29,8 +26,12 @@ export class DaikinPrometheusExporter {
   private consumptionCoolingYearGauge!: Gauge<string>;
   private dataUpdateCounter!: Counter<string>;
 
-  constructor() {
+  constructor(collectNodeMetrics: boolean = true) {
     this.app = express();
+    // Metriche di default di Node.js (attive solo se non disattivate via flag)
+    if (collectNodeMetrics) {
+      collectDefaultMetrics();
+    }
     this.initializeMetrics();
     this.setupRoutes();
   }

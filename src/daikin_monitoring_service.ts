@@ -15,6 +15,7 @@ interface DaikinConfig {
   tokenFilePath: string;
   oidcCallbackServerPort: number;
   oidcCallbackServerExternalAddress?: string;
+  enableNodeMetrics?: boolean;
 }
 
 export class DaikinMonitoringService {
@@ -26,7 +27,7 @@ export class DaikinMonitoringService {
 
   constructor(config: DaikinConfig) {
     this.config = config;
-    this.exporter = new DaikinPrometheusExporter();
+    this.exporter = new DaikinPrometheusExporter(config.enableNodeMetrics);
     this.cache = new DaikinDataCache(config.cacheFilePath);
 
     // Inizializza il controller Daikin usando i path configurabili

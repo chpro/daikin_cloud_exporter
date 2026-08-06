@@ -153,6 +153,7 @@ cert/                             # SSL certificates for OIDC flow
 | `OIDC_CLIENT_SECRET` | - | Daikin OIDC Client Secret (required) |
 | `UPDATE_INTERVAL` | 480 | Data fetch interval in seconds |
 | `PROMETHEUS_PORT` | 3001 | Port for Prometheus metrics server |
+| `ENABLE_NODE_METRICS` | `false` | Set to `true` to enable the default Node.js runtime metrics (`nodejs_*`) |
 | `CERT_PATH` | `./cert` | Directory containing SSL certificates |
 | `CACHE_FILE_PATH` | `./daikin-cache.json` | File path for data cache |
 | `TOKEN_FILE_PATH` | `./daikin-controller-cloud-tokenset` | File path for OIDC tokens |
