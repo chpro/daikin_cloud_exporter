@@ -25,16 +25,34 @@ This application connects to the Daikin Cloud API to fetch real-time data from y
 | `daikin_room_temperature_celsius` | Gauge | Room temperature in Celsius | device_id, device_model, device_name, control_id |
 | `daikin_room_humidity_percent` | Gauge | Room humidity percentage | device_id, device_model, device_name, control_id |
 | `daikin_outdoor_temperature_celsius` | Gauge | Outdoor temperature in Celsius | device_id, device_model, device_name, control_id |
-| `daikin_target_temperature_celsius` | Gauge | Target temperature setting | device_id, device_model, device_name, control_id, mode |
+| `daikin_target_temperature_celsius` | Gauge | Target temperature setting in Celsius | device_id, device_model, device_name, control_id, mode |
 | `daikin_device_online` | Gauge | Device online status (1=online, 0=offline) | device_id, device_model |
 | `daikin_device_power_on` | Gauge | Device power status (1=on, 0=off) | device_id, device_model, device_name, control_id, mode |
-| `daikin_powerful_mode` | Gauge | Powerful mode status | device_id, device_model, device_name, control_id |
-| `daikin_error_state` | Gauge | Device error state | device_id, device_model, device_name, control_id |
-| `daikin_warning_state` | Gauge | Device warning state | device_id, device_model, device_name, control_id |
+| `daikin_operation_mode` | Gauge | Active operation mode (0=auto, 1=dry, 2=cooling, 3=heating, 4=fanOnly) | device_id, device_model, device_name, control_id, operation_mode |
+| `daikin_holiday_mode` | Gauge | Holiday mode status (1=on, 0=off) | device_id, device_model, device_name, control_id |
+| `daikin_error_code` | Gauge | Device error code (1 = current code) | device_id, device_model, device_name, control_id, error_code |
+| `daikin_powerful_mode` | Gauge | Powerful mode status (1=on, 0=off) | device_id, device_model, device_name, control_id |
+| `daikin_error_state` | Gauge | Device error state (1=error, 0=no error) | device_id, device_model, device_name, control_id |
+| `daikin_warning_state` | Gauge | Device warning state (1=warning, 0=no warning) | device_id, device_model, device_name, control_id |
+| `daikin_caution_state` | Gauge | Device caution state (1=caution, 0=no caution) | device_id, device_model, device_name, control_id |
+| `daikin_fan_speed` | Gauge | Active mode fan speed (0=auto, 1=fixed, 2=quiet) | device_id, device_model, device_name, control_id, mode, fan_speed |
+| `daikin_fan_speed_current_mode` | Gauge | Active mode fan speed setting (0=auto, 1=fixed, 2=quiet) | device_id, device_model, device_name, control_id, mode, current_mode |
+| `daikin_fan_speed_fixed_level` | Gauge | Active mode fan speed fixed level (numeric value) | device_id, device_model, device_name, control_id, mode |
+| `daikin_fan_direction` | Gauge | Active mode fan direction (0=stop, 1=swing) | device_id, device_model, device_name, control_id, mode, orientation, direction |
+| `daikin_fan_direction_horizontal` | Gauge | Active mode horizontal fan direction (0=stop, 1=swing) | device_id, device_model, device_name, control_id, mode, direction |
+| `daikin_fan_direction_vertical` | Gauge | Active mode vertical fan direction (0=stop, 1=swing) | device_id, device_model, device_name, control_id, mode, direction |
+| `daikin_schedule_enabled` | Gauge | Schedule enabled status (1=enabled, 0=disabled) | device_id, device_model, device_name, control_id, schedule_mode |
+| `daikin_schedule_current` | Gauge | Current active schedule (1 = current schedule) | device_id, device_model, device_name, control_id, schedule_mode, schedule_id |
+| `daikin_gateway_info` | Gauge | Gateway information (always 1) | device_id, device_model, gateway_name, gateway_id, ip_address, mac_address, firmware_version, model_info |
+| `daikin_gateway_firmware_update_supported` | Gauge | Gateway firmware update supported status (1=supported, 0=not supported) | device_id, device_model, gateway_name, gateway_id |
+| `daikin_indoor_unit_info` | Gauge | Indoor unit information (always 1) | device_id, device_model, unit_name, unit_id, software_version |
+| `daikin_device_last_updated_timestamp_seconds` | Gauge | Timestamp of last update from Daikin Cloud in seconds since Unix epoch | device_id, device_model |
+| `daikin_consumption_heating_hour_kwh` | Gauge | Heating energy consumption in current hour in kWh (data is a 2 hour average) | device_id, device_model, device_name, control_id |
 | `daikin_consumption_heating_today_kwh` | Gauge | Heating energy consumption today in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_heating_week_kwh` | Gauge | Heating energy consumption this week in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_heating_month_kwh` | Gauge | Heating energy consumption this month in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_heating_year_kwh` | Gauge | Heating energy consumption this year in kWh | device_id, device_model, device_name, control_id |
+| `daikin_consumption_cooling_hour_kwh` | Gauge | Cooling energy consumption in current hour in kWh (data is a 2 hour average) | device_id, device_model, device_name, control_id |
 | `daikin_consumption_cooling_today_kwh` | Gauge | Cooling energy consumption today in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_cooling_week_kwh` | Gauge | Cooling energy consumption this week in kWh | device_id, device_model, device_name, control_id |
 | `daikin_consumption_cooling_month_kwh` | Gauge | Cooling energy consumption this month in kWh | device_id, device_model, device_name, control_id |
