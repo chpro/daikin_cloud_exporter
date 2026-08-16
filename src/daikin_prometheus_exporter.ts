@@ -587,10 +587,10 @@ export class DaikinPrometheusExporter {
   }
 
   startServer(port: number): void {
-    this.server = this.app.listen(port, '0.0.0.0', () => {
-      console.log(`📊 Prometheus exporter listening on http://0.0.0.0:${port}`);
-      console.log(`📈 Metrics available at http://0.0.0.0:${port}/metrics`);
-      console.log(`🏥 Health check at http://0.0.0.0:${port}/health`);
+    this.server = this.app.listen(port, '::', () => {
+      console.log(`📊 Prometheus exporter listening on http://[::]:${port}`);
+      console.log(`📈 Metrics available at http://[::]:${port}/metrics`);
+      console.log(`🏥 Health check at http://[::]:${port}/health`);
     });
   }
 
