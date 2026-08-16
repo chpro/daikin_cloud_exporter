@@ -287,8 +287,10 @@ export class DaikinDataParser {
             } else if (periodType === 'y') {
               startIndex = energyValues.length > 1 ? 1 : 0;
             }
+            const sum = energyValues.slice(startIndex, endIndex).reduce((acc, val) => acc + val, 0);
+            console.log(`🕒 extractPeriodSum: date=${new Date()}, periodType=${periodType}, startIndex=${startIndex}, endIndex=${endIndex}, arrayLength=${energyValues.length}, sum=${sum}`);
 
-            return energyValues.slice(startIndex, endIndex).reduce((acc, val) => acc + val, 0);
+            return sum;
           };
 
           const calculateModeSums = (modeData?: {
